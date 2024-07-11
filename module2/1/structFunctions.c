@@ -154,7 +154,7 @@ struct Contact* deleteContact(struct Contact* contacts, int32_t n)
 {
     if (n > 0 && n <= size)
     {
-        struct Contact* temp = (struct Contact*)malloc((size+1)*sizeof(struct Contact));
+        struct Contact* temp = (struct Contact*)malloc((size-1)*sizeof(struct Contact));
         if (size != 0)
         {
             int32_t j = 0;
