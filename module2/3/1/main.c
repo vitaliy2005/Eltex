@@ -143,6 +143,8 @@ int main()
             print_binary_permissions(file_stat.st_mode);
             print_symbolic_permissions(file_stat.st_mode);
             print_numeric_permissions(file_stat.st_mode);
+            printf("--------------------------\n");
+            system("ls -l");
             break;
         }
         else
