@@ -35,8 +35,6 @@ void printListContact(struct Contact*);
 DblLinkedList* createDblLinkedList();
 void printDblLinkedList(DblLinkedList *list, void (*fun)(Contact*));
 void pushBack(DblLinkedList *list,  Contact* value);
-void deleteNth(DblLinkedList *list, int32_t index);
-Node* getNth(DblLinkedList *list, int32_t index);
 Contact* createContact( int32_t priority, char* message);
 
 #endif

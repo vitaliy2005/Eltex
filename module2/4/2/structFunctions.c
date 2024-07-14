@@ -124,74 +124,6 @@ Contact* popBack(DblLinkedList *list)
     return tmp;
 }
 
-Node* getNth(DblLinkedList *list, int32_t index)
-{
-    Node *tmp = NULL;
-    size_t i;
-
-    if (index < list->size/2)
-    {
-        i = 0;
-        tmp = list->head;
-        while (tmp && i < index)
-        {
-            tmp = tmp->next;
-            i++;
-        }
-    }
-    else
-    {
-        i = list->size - 1;
-        tmp = list->tail;
-        while (tmp && i > index)
-        {
-            tmp = tmp->prev;
-            i--;
-        }
-    }
-
-    return tmp;
-}
-
-void deleteNth(DblLinkedList *list, int32_t index)
-{
-    if((index > 0) && (index <= list->size))
-    {
-        Node *elm = NULL;
-        Contact *tmp = NULL;
-        elm = getNth(list, index-1);
-        if (elm == NULL)
-        {
-            exit(5);
-        }
-        if (elm->prev)
-        {
-            elm->prev->next = elm->next;
-        }
-        if (elm->next)
-        {
-            elm->next->prev = elm->prev;
-        }
-
-        if (!elm->prev)
-        {
-            list->head = elm->next;
-        }
-        if (!elm->next)
-        {
-            list->tail = elm->prev;
-        }
-
-        free(elm);
-
-        list->size--;
-    }
-    else
-    {
-        system("clear");
-        printf("Данного контакта не существует\n");
-    }
-}
 
 void printDblLinkedList(DblLinkedList *list, void (*fun)(Contact*))
 {
@@ -210,7 +142,7 @@ void printDblLinkedList(DblLinkedList *list, void (*fun)(Contact*))
     else
     {
         system("clear");
-        printf("Нет контактов\n\n");
+        printf("Нет сообщений\n\n");
     }
 
 }
