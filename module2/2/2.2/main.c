@@ -6,13 +6,14 @@
 int main()
 {
     int32_t firstDight, secondDight;
-    char typeOperation[1];
+    char typeOperation[5];
 
     Operation operations[] = {
-            {'+', add},
-            {'-', subtract},
-            {'*', multiply},
-            {'/', divide}};
+            {"+", add},
+            {"-", subtract},
+            {"*", multiply},
+            {"/", divide},
+            {"max", max}};
     while (1)
     {
         printf("Введите первое число\n");

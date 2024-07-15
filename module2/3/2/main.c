@@ -1,60 +1,57 @@
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
 
-int ipv4(char* ip)
+int ipv4(char ip[])
 {
-    char buf[strlen(ip)];
-    int32_t j = 0;
-    for (int32_t i = 0; i < strlen(ip); i++)
-        if(ip[i] != '.') buf[j++] = ip[i];
-    return atoi(buf);
+    char* buf;
+    uint8_t bit = 0;
+    int32_t ipBin = 0;
+
+    buf = strtok(strdup(ip), ".");
+
+    while (buf != NULL)
+    {
+        bit = (uint8_t)atoi(buf);
+        ipBin |=  bit;
+        ipBin = ipBin << 8;
+        buf = strtok(NULL, ".");
+    }
+    return ipBin;
 }
 
 
 int main(int argc, char *argv[])
 {
+    srand(time(NULL));
 
-    printf("%d\n", ipv4("255.255.34.0"));
+    if (argc != 4) {
+        printf("Параметры: %s gateway_ip subnet_mask num_packets\n", argv[0]);
+        return 1;
+    }
 
+    uint32_t gateway = ipv4(argv[1]), subnet_mask = ipv4(argv[2]);
+    int32_t num_packets = atoi(argv[3]);
+    int same_subnet_count = 0, diff_subnet_count = 0;
+    int32_t ip;
 
+    for (int i = 0; i < num_packets; i++)
+    {
+        ip = (gateway & subnet_mask) | (rand() & subnet_mask);
+        if ((ip & subnet_mask) == (gateway & subnet_mask))
+        {
+            same_subnet_count++;
+        }
+        else
+        {
+            diff_subnet_count++;
+        }
+    }
 
-    // if (argc != 4) {
-    //     printf("Usage: %s gateway_ip subnet_mask num_packets\n", argv[0]);
-    //     return 1;
-    // }
-
-    // struct in_addr gateway, subnet_mask;
-    // uint32_t gateway_ip, subnet_mask_val, ip;
-    // int num_packets = atoi(argv[3]);
-    // int same_subnet_count = 0, diff_subnet_count = 0;
-
-    // if (inet_pton(AF_INET, argv[1], &gateway) == 0 || inet_pton(AF_INET, argv[2], &subnet_mask) == 0) {
-    //     printf("Invalid IP or subnet mask\n");
-    //     return 1;
-    // }
-
-    // gateway_ip = ntohl(gateway.s_addr);
-    // subnet_mask_val = ntohl(subnet_mask.s_addr);
-
-    // srand(time(NULL));
-
-    // for (int i = 0; i < num_packets; i++)
-    // {
-    //     ip = htonl((gateway_ip & subnet_mask_val) | (rand() & subnet_mask_val));
-    //     if ((ip & subnet_mask_val) == (gateway_ip & subnet_mask_val))
-    //     {
-    //         same_subnet_count++;
-    //     }
-    //     else
-    //     {
-    //         diff_subnet_count++;
-    //     }
-    // }
-
-    // printf("Packets within the subnet: %d (%.2f%%)\n", same_subnet_count, (float)same_subnet_count / num_packets * 100);
-    // printf("Packets outside the subnet: %d (%.2f%%)\n", diff_subnet_count, (float)diff_subnet_count / num_packets * 100);
+    printf("Пакеты внутри сети: %d (%.2f%%)\n", same_subnet_count, (float)same_subnet_count / num_packets * 100);
+    printf("Пакеты отправлены во внешную сеть: %d (%.2f%%)\n", diff_subnet_count, (float)diff_subnet_count / num_packets * 100);
 
     return 0;
 }

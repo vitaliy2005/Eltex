@@ -1,6 +1,12 @@
 #include "funcAndStruct.h"
 
 
+double max(double a, double b)
+{
+    return 2;
+}
+
+
 double add(double a, double b)
 {
     return a + b;

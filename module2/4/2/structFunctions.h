@@ -10,12 +10,12 @@
 typedef struct Contact
 {
     char message[256];
-    int32_t priority;
 }Contact;
 
 typedef struct Node
 {
     Contact* value;
+    int32_t priority;
     struct Node *next;
     struct Node *prev;
 } Node;
