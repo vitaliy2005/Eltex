@@ -40,7 +40,7 @@ int main(int argc, char *argv[])
     for (int i = 0; i < num_packets; i++)
     {
         ip = (gateway & subnet_mask) | (rand() & subnet_mask);
-        if ((ip & subnet_mask) == (gateway & subnet_mask))
+        if (ip == (gateway & subnet_mask))
         {
             same_subnet_count++;
         }
