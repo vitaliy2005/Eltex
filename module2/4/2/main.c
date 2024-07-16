@@ -6,11 +6,14 @@ int main()
     srand(time(NULL));
     const int32_t N = rand() % 25;
     DblLinkedList *queue = createDblLinkedList();
-    Contact* test;
+    Node* test;
 
     for (int32_t i = 0; i < N; i++)
     {
-        pushBack(queue, createContact(rand() % 256, "test"));
+        Node *tmp = (Node*) malloc(sizeof(Node));
+        strcpy(tmp->message, "test");
+        tmp->priority = rand() % 256;
+        pushBack(queue, tmp);
     }
     printDblLinkedList(queue, printListContact);
 

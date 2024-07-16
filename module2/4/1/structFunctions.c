@@ -1,5 +1,6 @@
 #include "structFunctions.h"
 
+
 DblLinkedList* createDblLinkedList()
 {
     DblLinkedList *tmp = (DblLinkedList*) malloc(sizeof(DblLinkedList));
@@ -16,6 +17,7 @@ void deleteDblLinkedList(DblLinkedList **list)
     while (tmp)
     {
         next = tmp->next;
+        free(tmp->value);
         free(tmp);
         tmp = next;
     }
@@ -36,6 +38,7 @@ void pushFront(DblLinkedList *list, Contact* data)
     if (list->head)
     {
         list->head->prev = tmp;
+        bubbleSort(list->head);
     }
     list->head = tmp;
 
@@ -44,6 +47,7 @@ void pushFront(DblLinkedList *list, Contact* data)
         list->tail = tmp;
     }
     list->size++;
+
 }
 
 
@@ -94,6 +98,7 @@ void pushBack(DblLinkedList *list,  Contact* value)
         list->head = tmp;
     }
     list->size++;
+    bubbleSort(list->head);
 }
 
 Contact* popBack(DblLinkedList *list)
@@ -181,6 +186,7 @@ void deleteNth(DblLinkedList *list, int32_t index)
             list->tail = elm->prev;
         }
 
+        free(elm->value);
         free(elm);
 
         list->size--;
@@ -329,10 +335,58 @@ void editContact(DblLinkedList *list, int32_t index)
             system("clear");
             printf("Данные в контакте %d изменены\n\n", index);
         }
-
+        bubbleSort(list->head);
     }
     else
     {
         printf("Такой записи не сущесивует\n\n");
     }
 }
+
+    int cmp(Contact* a, Contact* b)
+    {
+        if (strcasecmp(a->fathername, b->fathername) < 0)
+        {
+            return 0;
+        }
+        else
+        {
+            return 1;
+        }
+    }
+
+    void swap(Contact* a, Contact* b)
+    {
+        Contact temp = *a;
+        *a = *b;
+        *b = temp;
+    }
+
+    void bubbleSort(struct Node* head)
+    {
+        int swapped;
+        struct Node* ptr1;
+        struct Node* lptr = NULL;
+
+        if (head == NULL)
+        {
+            return;
+        }
+
+        do
+        {
+            swapped = 0;
+            ptr1 = head;
+
+            while (ptr1->next != lptr)
+            {
+                if (cmp(ptr1->value, ptr1->next->value))
+                {
+                    swap(ptr1->value, ptr1->next->value);
+                    swapped = 1;
+                }
+                ptr1 = ptr1->next;
+            }
+            lptr = ptr1;
+        } while (swapped);
+    }

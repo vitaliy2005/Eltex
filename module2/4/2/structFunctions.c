@@ -1,5 +1,5 @@
 #include "structFunctions.h"
-#include <stdio.h>
+
 
 
 DblLinkedList* createDblLinkedList()
@@ -25,14 +25,12 @@ void deleteDblLinkedList(DblLinkedList **list)
     (*list) = NULL;
 }
 
-void pushFront(DblLinkedList *list, Contact* data)
+void pushFront(DblLinkedList *list, Node* tmp)
 {
-    Node *tmp = (Node*) malloc(sizeof(Node));
     if (tmp == NULL)
     {
         exit(1);
     }
-    tmp->value = data;
     tmp->next = list->head;
     tmp->prev = NULL;
     if (list->head)
@@ -49,10 +47,9 @@ void pushFront(DblLinkedList *list, Contact* data)
 }
 
 
-Contact* popFront(DblLinkedList *list)
+Node* popFront(DblLinkedList *list)
 {
     Node *prev;
-    Contact *tmp;
     if (list->head == NULL)
     {
         exit(2);
@@ -68,21 +65,17 @@ Contact* popFront(DblLinkedList *list)
     {
         list->tail = NULL;
     }
-    tmp = prev->value;
-    free(prev);
 
     list->size--;
-    return tmp;
+    return prev;
 }
 
-void pushBack(DblLinkedList *list,  Contact* value)
+void pushBack(DblLinkedList *list,  Node* tmp)
 {
-    Node *tmp = (Node*) malloc(sizeof(Node));
     if (tmp == NULL)
     {
         exit(3);
     }
-    tmp->value = value;
     tmp->next = NULL;
     tmp->prev = list->tail;
     if (list->tail)
@@ -98,10 +91,9 @@ void pushBack(DblLinkedList *list,  Contact* value)
     list->size++;
 }
 
-Contact* popBack(DblLinkedList *list)
+Node* popBack(DblLinkedList *list)
 {
     Node *next;
-    Contact *tmp;
     if (list->tail == NULL)
     {
         exit(4);
@@ -117,15 +109,13 @@ Contact* popBack(DblLinkedList *list)
     {
         list->head = NULL;
     }
-    tmp = next->value;
-    free(next);
 
     list->size--;
-    return tmp;
+    return next;
 }
 
 
-void printDblLinkedList(DblLinkedList *list, void (*fun)(Contact*))
+void printDblLinkedList(DblLinkedList *list, void (*fun)(Node*))
 {
     if(list->size != 0)
     {
@@ -134,7 +124,7 @@ void printDblLinkedList(DblLinkedList *list, void (*fun)(Contact*))
         while (tmp)
         {
             printf("Сообщение %d\n", n++);
-            fun(tmp->value);
+            fun(tmp);
             tmp = tmp->next;
         }
         printf("\n");
@@ -147,32 +137,20 @@ void printDblLinkedList(DblLinkedList *list, void (*fun)(Contact*))
 
 }
 
-void printListContact(struct Contact* contact)
+void printListContact(struct Node* contact)
 {
     printf("сообщение - %s | приоритет - %d\n", contact->message, contact->priority);
 }
 
-Contact* createContact( int32_t priority, char* message)
-{
 
-    Contact* temp = (Contact*)malloc(sizeof( Contact));
-
-    temp->priority = priority;
-    strcpy(temp->message, message);
-
-    return temp;
-}
-
-Contact* popFrontPriority(DblLinkedList **list, int32_t priority)
+Node* popFrontPriority(DblLinkedList **list, int32_t priority)
 {
     Node *elm = (*list)->head;
     Node *next = NULL;
-    Contact* tmp = NULL;
     while (elm)
     {
-        if(elm->value->priority == priority)
+        if(elm->priority == priority)
         {
-            tmp = elm->value;
 
             if (elm->prev)
             {
@@ -193,10 +171,8 @@ Contact* popFrontPriority(DblLinkedList **list, int32_t priority)
                 (*list)->tail = elm->prev;
             }
 
-            free(elm);
-
             (*list)->size--;
-            return tmp;
+            return elm;
         }
         elm = elm->next;
     }
@@ -204,14 +180,14 @@ Contact* popFrontPriority(DblLinkedList **list, int32_t priority)
     return NULL;
 }
 
-Contact* popFrontPriorityMore(DblLinkedList **list, int32_t priority)
+Node* popFrontPriorityMore(DblLinkedList **list, int32_t priority)
 {
     Node *elm = (*list)->head;
     Node *next = NULL;
     Contact* tmp = NULL;
     while (elm)
     {
-        if(elm->value->priority >= priority)
+        if(elm->priority >= priority)
         {
             if (elm->prev)
             {
@@ -221,7 +197,6 @@ Contact* popFrontPriorityMore(DblLinkedList **list, int32_t priority)
             {
                 elm->next->prev = elm->prev;
             }
-            tmp = elm->value;
 
             if (!elm->prev)
             {
@@ -232,10 +207,9 @@ Contact* popFrontPriorityMore(DblLinkedList **list, int32_t priority)
                 (*list)->tail = elm->prev;
             }
 
-            free(elm);
 
             (*list)->size--;
-            return tmp;
+            return elm;
         }
         next = elm->next;
         elm = next;

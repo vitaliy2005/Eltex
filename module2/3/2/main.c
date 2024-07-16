@@ -42,6 +42,7 @@ int main(int argc, char *argv[])
         ip = (gateway & subnet_mask) | (rand() & subnet_mask);
         if (ip == (gateway & subnet_mask))
         {
+            printf("%b\n", (ip & subnet_mask));
             same_subnet_count++;
         }
         else
