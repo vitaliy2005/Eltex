@@ -6,16 +6,19 @@ int main()
 {
     int32_t firstDight, secondDight;
     char typeOperation[5];
-    void* handle = dlopen ("./lib.so", RTLD_LAZY);
-    if (!handle)
+    void* handleAdd = dlopen ("./libadd.so", RTLD_LAZY);
+    void* handleSubtract = dlopen ("./libsubtract.so", RTLD_LAZY);
+    void* handleMultiply = dlopen ("./libmultiply.so", RTLD_LAZY);
+    void* handledivide = dlopen ("./libdivide.so", RTLD_LAZY);
+    if (!handleAdd && !handleSubtract && !handleMultiply && !handledivide)
     {
         fputs (dlerror(), stderr);
         exit(1);
     }
-    addD = dlsym(handle, "add");
-    subtractD = dlsym(handle, "subtract");
-    multiplyD = dlsym(handle, "multiply");
-    divideD = dlsym(handle, "divide");
+    addD = dlsym(handleAdd, "add");
+    subtractD = dlsym(handleSubtract, "subtract");
+    multiplyD = dlsym(handleMultiply, "multiply");
+    divideD = dlsym(handledivide, "divide");
     Operation operations[] = {
             {"+", addD},
             {"-", subtractD},
