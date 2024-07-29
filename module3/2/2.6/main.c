@@ -19,7 +19,8 @@ void handle_sigint(int32_t sig)
     }
 }
 
-int main() {
+int main()
+{
     signal(SIGINT, handle_sigint);
     FILE *file = fopen("counter_output.txt", "a");
     if (file == NULL)
